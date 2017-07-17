@@ -3,7 +3,7 @@
     <string name="number_of_choices">Number of Choices_def</string>
     <string name="number_of_choices_description">Display 2, 4, 6 or guess buttons_def</string>
     <string name="world_regions">Regions_def</string>
-    <string name="world_region_description">Regions to include in the quiz_def</string>
+    <string name="world_regions_description">Regions to include in the quiz_def</string>
     <string name="guess_country">Guess the Country_def</string>
     <string name="results">%1$d guesses, %2$.02f%% correct_def</string>
     <string name="incorrect_answer">Incorrect!_def</string>
@@ -13,4 +13,6 @@
     <string name="reset_quiz">Reset Quiz_def</string>
     <string name="image_description">Image of the current flag in the quiz_def</string>
     <string name="default_region">North_America_def</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -8,7 +8,7 @@
     <string name="reset_quiz">Сбросить тест</string>
     <string name="restarting_quiz">Тест будет перезагружен с новыми настройками</string>
     <string name="results">%1$d догадывается, %2$.02f%% правильно</string>
-    <string name="world_region_description">Регионы, включенные в викторину</string>
+    <string name="world_regions_description">Регионы, включенные в викторину</string>
     <string name="default_region_message">Необходимо выбрать один регион. Установка Северной Америки в качестве региона по умолчанию.</string>
     <string name="world_regions">Регионы</string>
     <string name="default_region">Северная Америка</string>

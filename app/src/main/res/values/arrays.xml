@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="region_list">
+    <string-array name="regions_list">
         <item>Africa</item>
         <item>Asia</item>
         <item>Europe</item>
