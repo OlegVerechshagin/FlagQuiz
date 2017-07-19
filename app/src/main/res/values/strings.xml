@@ -14,5 +14,6 @@
     <string name="image_description">Image of the current flag in the quiz_def</string>
     <string name="default_region">North_America_def</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Settings_def</string>
+    <string name="text_button">Answer selection button_def</string>
 </resources>

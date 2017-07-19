@@ -13,4 +13,6 @@
     <string name="world_regions">Регионы</string>
     <string name="default_region">Северная Америка</string>
     <string name="guess_country">Угадай страну</string>
+    <string name="action_settings">Настройки</string>
+    <string name="text_button">Кнопка выбора ответа</string>
 </resources>
