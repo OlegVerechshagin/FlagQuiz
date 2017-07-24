@@ -26,10 +26,34 @@ public class MainActivity extends AppCompatActivity {
    private boolean phoneDevice = true; // включение портретного режима
    private boolean preferencesChanged = true; // настройки изменились?
 
+//   Настройка MainActivity
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
+      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+      setSupportActionBar(toolbar);
+
+//      Задание значений по умодчанию в файле SharedPreferences
+      PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+//      Регистрация слушателя для изменений SharedPreferences
+      PreferenceManager.getDefaultSharedPreferences(this).
+              registerOnSharedPreferenceChangeListener(
+                      preferencesChangedListener);
+
+//      Определение размера экрана
+      int screenSize = getResources().getConfiguration().screenLayout &
+              Configuration.SCREENLAYOUT_SIZE_MASK;
+
+//      Для планщетного устройства phoneDevice присваивается false
+      if (screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+              screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE)
+         phoneDevice = false; // не соответствует размерам телефона
+
+//      На телефоне разрешена только портретная ориентация
+      if (phoneDevice)
+         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
    }
 }
 
