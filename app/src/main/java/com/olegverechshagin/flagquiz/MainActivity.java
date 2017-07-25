@@ -100,4 +100,49 @@ public class MainActivity extends AppCompatActivity {
       startActivity(preferencesIntent);
       return super.onOptionsItemSelected(item);
    }
+
+//   Слушатель изменений в конфигурации SharedPreferences приложения
+   private OnSharedPreferenceChangeListener preferencesChangeListener =
+        new OnSharedPreferenceChangeListener() {
+//           Вызывается при изменении настроек приложения
+           @Override
+           public void onSharedPreferenceChanged(
+                   SharedPreferences sharedPreferences, String key) {
+              preferencesChanged = true; // пользователь изменил настройки
+
+              MainActivityFragment quizFragment = (MainActivityFragment)
+                      getSupportFragmentManager().findFragmentById(
+                              R.id.quizFragment);
+
+              if (key.equals(CHOICES)) { // изменилось число вариантов
+                 quizFragment.updateGuessRows(sharedPreferences);
+                 quizFragment.resetQuiz();
+              }
+              else if (key.equals(REGION)) { // изменились регионы
+                 Set<String> regions =
+                         sharedPreferences.getStringSet(REGION, null);
+
+                 if (regions != null && regions.size() > 0) {
+                    quizFragment.updateGuessRows(sharedPreferences);
+                    quizFragment.resetQuiz();
+                 }
+                 else {
+//                    Хотя бы один регион - по умолчанию Северная Америка
+                    SharedPreferences.Editor editor =
+                            sharedPreferences.edit();
+                    regions.add(getString(R.string.default_region));
+                    editor.putStringSet(REGION, regions);
+                    editor.apply();
+
+                    Toast.makeText(MainActivity.this,
+                            R.string.default_region_message,
+                            Toast.LENGTH_SHORT).show();
+                 }
+              }
+
+              Toast.makeText(MainActivity.this,
+                      R.string.restarting_quiz,
+                      Toast.LENGTH_SHORT).show();
+           }
+        };
 }
