@@ -76,4 +76,28 @@ public class MainActivity extends AppCompatActivity {
          preferencesChanged = false;
       }
    }
+
+//   Меню отображается на телефоне или планшете в портретной ориентации
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+//      Получение текущей ориентации устройства
+      int orientation = getResources().getConfiguration().orientation;
+
+//      Отображение меню приложения только в потретной ориентации
+      if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+//         Заполнение меню
+         getMenuInflater().inflate(R.menu.menu_main, menu);
+         return true;
+      }
+      else
+         return false;
+   }
+
+//   Отображает SettingsActivity при запуске на телефоне
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      Intent preferencesIntent = new Intent(this, SettingsActivity.class);
+      startActivity(preferencesIntent);
+      return super.onOptionsItemSelected(item);
+   }
 }
