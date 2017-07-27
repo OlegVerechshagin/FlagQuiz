@@ -58,12 +58,52 @@ public class MainActivityFragment extends Fragment {
    private LinearLayout[] guessLinearLayouts; // строки с кнопками
    private TextView answerTextView; // для привильного ответа
 
-   public MainActivityFragment() {
-   }
-
+//   Настройка MainActivityFragment при создании представления
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
-      return inflater.inflate(R.layout.fragment_settings, container, false);
+      super.onCreateView(inflater, container, savedInstanceState);
+      View view =
+              inflater.inflate(R.layout.fragment_main, container, false);
+
+      fileNameList = new ArrayList<>();
+      quizCountriesList = new ArrayList<>();
+      random = new SecureRandom();
+      handler = new Handler();
+
+//      Загрузка анимации для неправильных ответов
+      shakeAnimation = AnimationUtils.loadAnimation(getActivity(),
+              R.anim.incorrect_shake);
+      shakeAnimation.setRepeatCount(3); // анимация повторяется 3 раза
+
+//      Получение ссылок на компоненты графического интерфейса
+      quizLinearLayout =
+              (LinearLayout) view.findViewById(R.id.quizLinearLayout);
+      questionNumberTextView =
+              (TextView) view.findViewById(R.id.questionNumberTextView);
+      flagImageView = (ImageView) view.findViewById(R.id.flagImageView);
+      guessLinearLayouts = new LinearLayout[4];
+      guessLinearLayouts[0] =
+              (LinearLayout) view.findViewById(R.id.row1LinearLayout);
+      guessLinearLayouts[1] =
+              (LinearLayout) view.findViewById(R.id.row2LinearLayout);
+      guessLinearLayouts[2] =
+              (LinearLayout) view.findViewById(R.id.row3LinearLayout);
+      guessLinearLayouts[3] =
+              (LinearLayout) view.findViewById(R.id.row4LinearLayout);
+      answerTextView = (TextView) view.findViewById(R.id.answerTextView);
+
+//      Настройка слушателей для кнопок ответов
+      for (LinearLayout row: guessLinearLayouts) {
+         for (int column = 0; column < row.getChildCount(); column++) {
+            Button button = (Button) row.getChildAt(column);
+            button.setOnClickListener(guessButtonListener);
+         }
+      }
+
+//      Назначение текста questionNumberTextView
+      questionNumberTextView.setText(
+              getString(R.string.question, 1, FLAGS_IN_QUIZ));
+      return view; // возвращает представление фрагмента для вывода
    }
 }
