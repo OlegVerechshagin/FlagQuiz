@@ -106,4 +106,26 @@ public class MainActivityFragment extends Fragment {
               getString(R.string.question, 1, FLAGS_IN_QUIZ));
       return view; // возвращает представление фрагмента для вывода
    }
+
+//   Обновление guessRows на основании значения SharedPreferences
+    public void updateGuessRows(SharedPreferences sharedPreferences) {
+//        Получение количества отображаемых вариантов ответа
+        String choices =
+                sharedPreferences.getString(MainActivity.CHOICES, null);
+        guessRows = Integer.parseInt(choices) / 2;
+
+//        Все компоненты LinearLayout скрываются
+        for (LinearLayout layout: guessLinearLayouts)
+            layout.setVisibility(View.GONE);
+
+//        Отображение нужных компонентов LinearLayout
+        for (int row = 0; row < guessRows; row++)
+            guessLinearLayouts[row].setVisibility(View.VISIBLE);
+    }
+
+//    Обновление выбранных регионов по данным из SharedPreferences
+    public void updateRegions(SharedPreferences sharedPreferences) {
+        regionsSet =
+                sharedPreferences.getStringSet(MainActivity.REGION, null);
+    }
 }
