@@ -172,4 +172,29 @@ public class MainActivityFragment extends Fragment {
 
         loadNextFlag(); // запустить викторину загрузкой первого флага
     }
+
+//    Загрузка следующего флага после правильного ответа
+    private void loadNextFlag() {
+//        Получение имени файла следующего флага и удаление его из списка
+        String nextImage = quizCountriesList.remove(0);
+        correctAnswer = nextImage; // обновление правильного ответа
+        answerTextView.setText(""); // очистка answerTextView
+
+//        Отображение номера текущего вопроса
+        questionNumberTextView.setText(getString(
+                R.string.question, (correctAnswers + 1), FLAGS_IN_QUIZ));
+
+//        Извлечение региона из имени следующего изображения
+        String region = nextImage.substring(0, nextImage.indexOf('-'));
+
+//        Использование AssetManager для загрузки следующего изображения
+        AssetManager assets = getActivity().getAssets();
+
+//        Получение объета InputStream для ресурса следующего флага
+//        и попытка использования InputStream
+        try (InputStream stream =
+        assets.open(region + "/" + nextImage + ".png")) {
+//            Загрузка графики в виде объекта Drawable и вывод на flagImageView
+        }
+    }
 }
