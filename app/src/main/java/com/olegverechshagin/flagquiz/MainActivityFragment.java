@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -195,6 +195,43 @@ public class MainActivityFragment extends Fragment {
         try (InputStream stream =
         assets.open(region + "/" + nextImage + ".png")) {
 //            Загрузка графики в виде объекта Drawable и вывод на flagImageView
+            Drawable flag = Drawable.createFromStream(stream, nextImage);
+            flagImageView.setImageDrawable(flag);
+
+            animate(false); // анимация пояления флага на экране
         }
+        catch (IOException exception) {
+            Log.e(TAG, "Error loading " + nextImage, exception);
+        }
+
+        Collections.shuffle(fileNameList); // перестановка имен файлов
+
+//        Перемещение правильного ответа в конец fileNameList
+        int correct = fileNameList.indexOf(correctAnswer);
+        fileNameList.add(fileNameList.remove(correct));
+
+//        Добавление 2, 4, 6 или 8 кнопок в зависимости от значения guessRows
+        for (int row = 0; row < guessRows; row++) {
+//            Размещение кнопок в currentTableRow
+            for (int column = 0;
+                    column < guessLinearLayouts[row].getChildCount();
+                    column++) {
+//                Получение ссылки на Button
+                Button newGuessButton =
+                        (Button) guessLinearLayouts[row].getChildAt(column);
+                newGuessButton.setEnabled(true);
+
+//                Назначение названия страны текстом newGuessButton
+                String filename = fileNameList.get((row * 2) + column);
+                newGuessButton.setText(getCountryName(filename));
+            }
+        }
+
+//        Случайная замена одной кнопки правильным ответом
+        int row = random.nextInt(guessRows); // выбор случайной строки
+        int column = random.nextInt(2); // выбор случайного столбца
+        LinearLayout randomRow = guessLinearLayouts[row]; // получение строки
+        String countryName = getCountryName(correctAnswer);
+        ((Button) randomRow.getChildAt(column)).setText(countryName);
     }
 }
