@@ -234,4 +234,51 @@ public class MainActivityFragment extends Fragment {
         String countryName = getCountryName(correctAnswer);
         ((Button) randomRow.getChildAt(column)).setText(countryName);
     }
+
+//    Метод разбирает имя файла с флагом и возвращает название страны
+    private String getCountryName(String name) {
+        return name.substring(name.indexOf('-') + 1).replace('-', ' ');
+    }
+
+//    Весь макет quizLinearLayout появляется появляется или исчезает с экрана
+    private void animate(boolean animateOut) {
+//        Предотвращение анимации интерфейса для первого флага
+        if (correctAnswers == 0)
+            return;
+
+//        Вычисление координат центра
+        int centerX = (quizLinearLayout.getLeft() +
+        quizLinearLayout.getRight()) / 2;
+        int centerY = (quizLinearLayout.getTop() +
+        quizLinearLayout.getBottom()) / 2;
+
+//        Вычисление радиуса анимации
+        int radius = Math.max(quizLinearLayout.getWidth(),
+                quizLinearLayout.getHeight());
+
+        Animator animator;
+
+//        Если изображение должо исчезать с экрана
+        if (animateOut) {
+//            Создание кроговой анимации
+            animator = ViewAnimationUtils.createCircularReveal(
+                    quizLinearLayout, centerX, centerY, radius, 0);
+            animator.addListener(
+                    new AnimatorListenerAdapter() {
+//                        Вызывается при завершении анимации
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            loadNextFlag();
+                        }
+                    }
+            );
+        }
+        else { // если макет quizLinearLayout должен появиться
+            animator = ViewAnimationUtils.createCircularReveal(
+                    quizLinearLayout, centerX, centerY, 0, radius);
+        }
+
+        animator.setDuration(500); // анимация продолжительностью 500 мс
+        animator.start(); // начало анимации
+    }
 }
