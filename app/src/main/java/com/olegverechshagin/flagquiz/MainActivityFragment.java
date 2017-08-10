@@ -240,7 +240,7 @@ public class MainActivityFragment extends Fragment {
         return name.substring(name.indexOf('-') + 1).replace('-', ' ');
     }
 
-//    Весь макет quizLinearLayout появляется появляется или исчезает с экрана
+//    Весь макет quizLinearLayout появляется или исчезает с экрана
     private void animate(boolean animateOut) {
 //        Предотвращение анимации интерфейса для первого флага
         if (correctAnswers == 0)
@@ -281,4 +281,31 @@ public class MainActivityFragment extends Fragment {
         animator.setDuration(500); // анимация продолжительностью 500 мс
         animator.start(); // начало анимации
     }
+
+//    Вызвается при нажатии кнопки ответа
+    private OnClickListener guessButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Button guessButton = ((Button) v);
+            String guess = guessButton.getText().toString();
+            String answer = getCountryName(correctAnswer);
+            ++totalGuesses; // увеличение количества попыток пользователя
+
+            if (guess.equals(answer)) // если ответ правилен
+                ++correctAnswers; // увеличить количество правильных ответов
+
+//            Правильный ответ выводится зеленым цветом
+            answerTextView.setText(answer + "!");
+            answerTextView.setTextColor(
+                    getResources().getColor(R.color.correct_answer,
+                            getContext().getTheme()));
+
+            disableButtons(); // блокировка всех кнопок ответов
+
+//            Если пользователь правильно угадал FLAGS_IN_QUIZ
+            if (correctAnswers == FLAGS_IN_QUIZ) {
+//                DialogFragment для вывода статистики и перезапуска
+            }
+        }
+    };
 }
