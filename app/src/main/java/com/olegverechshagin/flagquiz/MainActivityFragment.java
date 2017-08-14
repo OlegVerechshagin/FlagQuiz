@@ -107,7 +107,7 @@ public class MainActivityFragment extends Fragment {
         return view; // возвращает представление фрагмента для вывода
     }
 
-    //   Обновление guessRows на основании значения SharedPreferences
+//   Обновление guessRows на основании значения SharedPreferences
     public void updateGuessRows(SharedPreferences sharedPreferences) {
 //        Получение количества отображаемых вариантов ответа
         String choices =
@@ -129,7 +129,7 @@ public class MainActivityFragment extends Fragment {
                 sharedPreferences.getStringSet(MainActivity.REGION, null);
     }
 
-    //    Настройка и запуск следующей серии вопросов
+//    Настройка и запуск следующей серии вопросов
     public void resetQuiz() {
 //        Использование AssetManager для получения имен файлов изображений
         AssetManager assets = getActivity().getAssets();
@@ -153,7 +153,7 @@ public class MainActivityFragment extends Fragment {
         totalGuesses = 0; // сброс общего количества попыток
         quizCountriesList.clear(); // очистка предыдущего списка стран
 
-        int  flagCounter = 1;
+        int flagCounter = 1;
         int numberOfFlags = fileNameList.size();
 
 //        Добавление FLAGS_IN_QUIZ сдучайных фалов в quizCountriesList
@@ -193,7 +193,7 @@ public class MainActivityFragment extends Fragment {
 //        Получение объета InputStream для ресурса следующего флага
 //        и попытка использования InputStream
         try (InputStream stream =
-        assets.open(region + "/" + nextImage + ".png")) {
+                     assets.open(region + "/" + nextImage + ".png")) {
 //            Загрузка графики в виде объекта Drawable и вывод на flagImageView
             Drawable flag = Drawable.createFromStream(stream, nextImage);
             flagImageView.setImageDrawable(flag);
@@ -214,8 +214,8 @@ public class MainActivityFragment extends Fragment {
         for (int row = 0; row < guessRows; row++) {
 //            Размещение кнопок в currentTableRow
             for (int column = 0;
-                    column < guessLinearLayouts[row].getChildCount();
-                    column++) {
+                 column < guessLinearLayouts[row].getChildCount();
+                 column++) {
 //                Получение ссылки на Button
                 Button newGuessButton =
                         (Button) guessLinearLayouts[row].getChildAt(column);
@@ -248,9 +248,9 @@ public class MainActivityFragment extends Fragment {
 
 //        Вычисление координат центра
         int centerX = (quizLinearLayout.getLeft() +
-        quizLinearLayout.getRight()) / 2;
+                quizLinearLayout.getRight()) / 2;
         int centerY = (quizLinearLayout.getTop() +
-        quizLinearLayout.getBottom()) / 2;
+                quizLinearLayout.getBottom()) / 2;
 
 //        Вычисление радиуса анимации
         int radius = Math.max(quizLinearLayout.getWidth(),
@@ -291,20 +291,69 @@ public class MainActivityFragment extends Fragment {
             String answer = getCountryName(correctAnswer);
             ++totalGuesses; // увеличение количества попыток пользователя
 
-            if (guess.equals(answer)) // если ответ правилен
+            if (guess.equals(answer)) { // если ответ правилен
                 ++correctAnswers; // увеличить количество правильных ответов
 
 //            Правильный ответ выводится зеленым цветом
-            answerTextView.setText(answer + "!");
-            answerTextView.setTextColor(
-                    getResources().getColor(R.color.correct_answer,
-                            getContext().getTheme()));
+                answerTextView.setText(answer + "!");
+                answerTextView.setTextColor(
+                        getResources().getColor(R.color.correct_answer,
+                                getContext().getTheme()));
 
-            disableButtons(); // блокировка всех кнопок ответов
+                disableButtons(); // блокировка всех кнопок ответов
 
 //            Если пользователь правильно угадал FLAGS_IN_QUIZ
-            if (correctAnswers == FLAGS_IN_QUIZ) {
+                if (correctAnswers == FLAGS_IN_QUIZ) {
 //                DialogFragment для вывода статистики и перезапуска
+                    DialogFragment quizResults =
+                            new DialogFragment() {
+//                            Создание окна AlertDialog
+                                @Override
+                                public Dialog onCreateDialog(Bundle bundle) {
+                                    AlertDialog.Builder builder =
+                                            new AlertDialog.Builder(getActivity());
+                                    builder.setMessage(
+                                            getString(R.string.results,
+                                                    totalGuesses,
+                                                    (1000 / (double) totalGuesses)));
+
+//                                Кнопка сброса "Reset Quiz"
+                                    builder.setPositiveButton(R.string.reset_quiz,
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    resetQuiz();
+                                                }
+                                            }
+                                    );
+
+                                    return builder.create(); // вернуть AlertDialog
+                                }
+                            };
+
+//                        Использование FragmentManager для вовода DialogFragment
+                    quizResults.setCancelable(false);
+                    quizResults.show(getFragmentManager(), "quiz results");
+                }
+                else { // ответ правильный, но викторина не закончена
+//                Загрузка следующего флага после двухсекундной задержки
+                    handler.postDelayed(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    animate(true); // анимация исчезновения флага
+                                }
+                            }, 2000); // 2000 миллисекунд для двухсекундной задержки
+                }
+            }
+            else { // неправильный ответ
+                flagImageView.startAnimation(shakeAnimation); // встряхивание
+
+//                Сообщение "Incorrect!" выводится красным шрифтом
+                answerTextView.setText(R.string.incorrect_answer);
+                answerTextView.setTextColor(getResources().getColor(
+                        R.color.incorrect_answer, getContext().getTheme()));
+                guessButton.setEnabled(false); // блокировка неправильного ответа
             }
         }
     };
