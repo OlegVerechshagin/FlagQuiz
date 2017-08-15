@@ -6,4 +6,9 @@
 /build
 /captures
 /app/app.iml
+#Intellij Idea#
 *.iml
+.idea/
+*.ipr
+*.iws
+.idea_modules/
