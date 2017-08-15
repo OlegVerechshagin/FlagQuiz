@@ -357,4 +357,14 @@ public class MainActivityFragment extends Fragment {
             }
         }
     };
+
+//    Вспомогательный метод, блокирующий все кноеки
+    private void disableButtons() {
+        for (int row = 0; row < guessRows; row++) {
+            LinearLayout guessRow = guessLinearLayouts[row];
+            for (int i = 0; i < guessRow.getChildCount(); i++) {
+                guessRow.getChildAt(i).setEnabled(false);
+            }
+        }
+    }
 }
