@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 //      Регистрация слушателя для изменений SharedPreferences
       PreferenceManager.getDefaultSharedPreferences(this).
               registerOnSharedPreferenceChangeListener(
-                      preferencesChangedListener);
+                      preferencesChangeListener);
 
 //      Определение размера экрана
       int screenSize = getResources().getConfiguration().screenLayout &
